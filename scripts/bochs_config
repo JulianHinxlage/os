@@ -1,0 +1,13 @@
+megs: 32
+romimage: file=/usr/share/bochs/BIOS-bochs-legacy
+vgaromimage: file=/usr/share/bochs/VGABIOS-lgpl-latest
+vga: extension=vbe, update_freq=15
+
+#floppya: 1_44=../build/os.img, status=inserted
+#boot: floppy
+
+ata0-master: type=disk, path=../build/os.img, status=inserted
+boot: disk
+
+mouse: enabled=0
+display_library: sdl2, options="gui_debug"
