@@ -1,6 +1,6 @@
-#include "instructions.hpp"
+#include "instructions.h"
 
-void halt(){
+void x86_hlt(){
     asm("hlt\n");
 }
 
@@ -13,15 +13,15 @@ void halt_all(){
     }
 }
 
-void i686_iowait(){
+void x86_iowait(){
     // write to unused port
-    i686_outb(0x80, 0);
+    x86_outb(0x80, 0);
 }
 
-void i686_sti(){
+void x86_sti(){
     asm("sti\n");
 }
 
-void i686_cli(){
+void x86_cli(){
     asm("cli\n");
 }

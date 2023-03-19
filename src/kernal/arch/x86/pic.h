@@ -1,5 +1,5 @@
 #pragma once
-#include "instructions.hpp"
+#include "instructions.h"
 
 #define PIC_IRQ_OFFSET 0x20
 

@@ -1,6 +1,6 @@
 
-global i686_GDT_load
-i686_GDT_load:
+global x86_GDT_load
+x86_GDT_load:
     push ebp
     mov ebp, esp
 

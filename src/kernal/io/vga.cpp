@@ -1,18 +1,10 @@
 #include "vga.h"
-#include "../arch/i686/instructions.hpp"
+#include "arch/x86/instructions.h"
 
 int width;
 int height;
 int cursor_pos;
 uint8_t *video_memory;
-
-//uint8_t inb(uint16_t port){
-//    return i686_inb(port);
-//}
-//
-//void outb(uint16_t port, uint8_t value){
-//    i686_outb(port, value);
-//}
 
 void VGA_init() {
     width = 80;
@@ -59,23 +51,23 @@ void VGA_clear() {
 }
 
 void enable_cursor(uint8_t cursor_start, uint8_t cursor_end) {
-	i686_outb(0x3D4, 0x0A);
-	i686_outb(0x3D5, (i686_inb(0x3D5) & 0xC0) | cursor_start);
+	x86_outb(0x3D4, 0x0A);
+	x86_outb(0x3D5, (x86_inb(0x3D5) & 0xC0) | cursor_start);
  
-	i686_outb(0x3D4, 0x0B);
-	i686_outb(0x3D5, (i686_inb(0x3D5) & 0xE0) | cursor_end);
+	x86_outb(0x3D4, 0x0B);
+	x86_outb(0x3D5, (x86_inb(0x3D5) & 0xE0) | cursor_end);
 }
 
 void disable_cursor() {
-	i686_outb(0x3D4, 0x0A);
-	i686_outb(0x3D5, 0x20);
+	x86_outb(0x3D4, 0x0A);
+	x86_outb(0x3D5, 0x20);
 }
 
 void VGA_set_cursor(int x, int y) {
 	uint16_t pos = y * width + x;
  
-	i686_outb(0x3D4, 0x0F);
-	i686_outb(0x3D5, (uint8_t) (pos & 0xFF));
-	i686_outb(0x3D4, 0x0E);
-	i686_outb(0x3D5, (uint8_t) ((pos >> 8) & 0xFF));
+	x86_outb(0x3D4, 0x0F);
+	x86_outb(0x3D5, (uint8_t) (pos & 0xFF));
+	x86_outb(0x3D4, 0x0E);
+	x86_outb(0x3D5, (uint8_t) ((pos >> 8) & 0xFF));
 }

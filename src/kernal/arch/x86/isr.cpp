@@ -1,9 +1,11 @@
-#include "isr.hpp"
-#include "../../io/printf.h"
-#include "../../io/vga.h"
+#include "isr.h"
+#include "io/printf.h"
+#include "io/vga.h"
 #include "panic.h"
-#include "pic.hpp"
+#include "pic.h"
 #include "ps2.h"
+
+#include "driver/ata.h"
 
 void ISR_interrupt_service_routine(ISR_Registers *regs){
     if(regs->interrupt >= PIC_IRQ_OFFSET && regs->interrupt < PIC_IRQ_OFFSET + 0x10){
@@ -24,6 +26,9 @@ void ISR_interrupt_service_routine(ISR_Registers *regs){
             }
 
             //printf("Key: %i", PS2_get_key());
+        }
+        else if(irq== 14){
+            ATA_interrupt(irq);
         }
         else{
             //other

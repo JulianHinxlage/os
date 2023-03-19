@@ -56,7 +56,7 @@ GDT_Entry gdt_table[16];
 
 GDT_Descriptor gdt_descriptor;
 
-extern "C" void i686_GDT_load(GDT_Descriptor *descriptor, uint8_t dataSegemnt, uint8_t codeSegment);
+extern "C" void x86_GDT_load(GDT_Descriptor *descriptor, uint8_t dataSegemnt, uint8_t codeSegment);
 
 void GDT_init(){
     gdt_table[0] = GDT_entry(0, 0, 0, 0),
@@ -72,5 +72,5 @@ void GDT_init(){
     gdt_descriptor.size = sizeof(GDT_Entry) * 3 - 1;
     gdt_descriptor.ptr = gdt_table;
 
-    i686_GDT_load(&gdt_descriptor, 2 * sizeof(GDT_Entry), 1 * sizeof(GDT_Entry));
+    x86_GDT_load(&gdt_descriptor, 2 * sizeof(GDT_Entry), 1 * sizeof(GDT_Entry));
 }

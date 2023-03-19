@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "isr_stub.hpp"
+#include "isr_stub.h"
 
 #pragma pack(1)
 struct IDT_Entry {
@@ -44,7 +44,7 @@ IDT_Entry idt_table[256];
 
 IDT_Descriptor idt_descriptor;
 
-extern "C" void i686_IDT_load(IDT_Descriptor *descriptor);
+extern "C" void x86_IDT_load(IDT_Descriptor *descriptor);
 
 void IDT_init(){
     ISR_stub_table_init();
@@ -56,5 +56,5 @@ void IDT_init(){
     idt_descriptor.size = sizeof(IDT_Entry) * 256 - 1;
     idt_descriptor.ptr = idt_table;
 
-    i686_IDT_load(&idt_descriptor);
+    x86_IDT_load(&idt_descriptor);
 }

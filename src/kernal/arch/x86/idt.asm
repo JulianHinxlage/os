@@ -1,6 +1,6 @@
 
-global i686_IDT_load
-i686_IDT_load:
+global x86_IDT_load
+x86_IDT_load:
     push ebp
     mov ebp, esp
 

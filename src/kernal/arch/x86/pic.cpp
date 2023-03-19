@@ -1,4 +1,4 @@
-#include "pic.hpp"
+#include "pic.h"
 
 #define PIC1_COMMAND_PORT 0x20
 #define PIC1_DATA_PORT 0x21
@@ -36,39 +36,39 @@ uint16_t pic_mask = 0xffff;
 uint16_t pic_cached_mask = 0xffff;
 
 bool PIC_probe(){
-    i686_outb(PIC2_DATA_PORT, 0xff);
-    i686_outb(PIC1_DATA_PORT, 0xf5);
-    bool found = i686_inb(PIC1_DATA_PORT) == 0xf5;
-    i686_outb(PIC1_DATA_PORT, 0xff);
+    x86_outb(PIC2_DATA_PORT, 0xff);
+    x86_outb(PIC1_DATA_PORT, 0xf5);
+    bool found = x86_inb(PIC1_DATA_PORT) == 0xf5;
+    x86_outb(PIC1_DATA_PORT, 0xff);
     return found;
 }
 
 void PIC_init(bool autoEOI){
     PIC_set_mask(0xffff);
 
-    i686_outb(PIC1_COMMAND_PORT, PIC_ICW1_ICW4 | PIC_ICW1_INIT);
-    i686_iowait();
-    i686_outb(PIC2_COMMAND_PORT, PIC_ICW1_ICW4 | PIC_ICW1_INIT);
-    i686_iowait();
+    x86_outb(PIC1_COMMAND_PORT, PIC_ICW1_ICW4 | PIC_ICW1_INIT);
+    x86_iowait();
+    x86_outb(PIC2_COMMAND_PORT, PIC_ICW1_ICW4 | PIC_ICW1_INIT);
+    x86_iowait();
 
-    i686_outb(PIC1_DATA_PORT, PIC_IRQ_OFFSET);
-    i686_iowait();
-    i686_outb(PIC2_DATA_PORT, PIC_IRQ_OFFSET + 0x08);
-    i686_iowait();
+    x86_outb(PIC1_DATA_PORT, PIC_IRQ_OFFSET);
+    x86_iowait();
+    x86_outb(PIC2_DATA_PORT, PIC_IRQ_OFFSET + 0x08);
+    x86_iowait();
 
-    i686_outb(PIC1_DATA_PORT, 0x04);
-    i686_iowait();
-    i686_outb(PIC2_DATA_PORT, 0x02);
-    i686_iowait();
+    x86_outb(PIC1_DATA_PORT, 0x04);
+    x86_iowait();
+    x86_outb(PIC2_DATA_PORT, 0x02);
+    x86_iowait();
 
     uint8_t icw4 = PIC_ICW4_8086;
     if(autoEOI){
         icw4 |= PIC_ICW4_AUTO_EOI;
     }
-    i686_outb(PIC1_DATA_PORT, icw4);
-    i686_iowait();
-    i686_outb(PIC2_DATA_PORT, icw4);
-    i686_iowait();
+    x86_outb(PIC1_DATA_PORT, icw4);
+    x86_iowait();
+    x86_outb(PIC2_DATA_PORT, icw4);
+    x86_iowait();
 
     PIC_set_mask(0x0000);
     pic_mask = 0x0000;
@@ -77,10 +77,10 @@ void PIC_init(bool autoEOI){
 
 void PIC_set_mask(uint16_t mask) {
     pic_mask = mask;
-    i686_outb(PIC1_DATA_PORT, (pic_mask & 0x00ff) >> 0);
-    i686_iowait();
-    i686_outb(PIC2_DATA_PORT, (pic_mask & 0xff00) >> 8);
-    i686_iowait();
+    x86_outb(PIC1_DATA_PORT, (pic_mask & 0x00ff) >> 0);
+    x86_iowait();
+    x86_outb(PIC2_DATA_PORT, (pic_mask & 0xff00) >> 8);
+    x86_iowait();
 }
 
 void PIC_disable() {
@@ -102,20 +102,20 @@ void PIC_enable_irq(int irq) {
 
 void PIC_send_eoi(int irq) {
     if(irq >= 8){
-        i686_outb(PIC2_COMMAND_PORT, PIC_CMD_END_OF_INTERRUPT);
+        x86_outb(PIC2_COMMAND_PORT, PIC_CMD_END_OF_INTERRUPT);
     }
-    i686_outb(PIC1_COMMAND_PORT, PIC_CMD_END_OF_INTERRUPT);
+    x86_outb(PIC1_COMMAND_PORT, PIC_CMD_END_OF_INTERRUPT);
 }
 
 uint16_t PIC_get_irr() {
-    i686_outb(PIC1_COMMAND_PORT, PIC_CMD_READ_IRR);
-    i686_outb(PIC2_COMMAND_PORT, PIC_CMD_READ_IRR);
-    return (uint16_t)i686_inb(PIC1_COMMAND_PORT) | (uint16_t)i686_inb(PIC2_COMMAND_PORT) << 8;
+    x86_outb(PIC1_COMMAND_PORT, PIC_CMD_READ_IRR);
+    x86_outb(PIC2_COMMAND_PORT, PIC_CMD_READ_IRR);
+    return (uint16_t)x86_inb(PIC1_COMMAND_PORT) | (uint16_t)x86_inb(PIC2_COMMAND_PORT) << 8;
 }
 
 uint16_t PIC_get_isr() {
-    i686_outb(PIC1_COMMAND_PORT, PIC_CMD_READ_ISR);
-    i686_outb(PIC2_COMMAND_PORT, PIC_CMD_READ_ISR);
-    return (uint16_t)i686_inb(PIC1_COMMAND_PORT) | (uint16_t)i686_inb(PIC2_COMMAND_PORT) << 8;
+    x86_outb(PIC1_COMMAND_PORT, PIC_CMD_READ_ISR);
+    x86_outb(PIC2_COMMAND_PORT, PIC_CMD_READ_ISR);
+    return (uint16_t)x86_inb(PIC1_COMMAND_PORT) | (uint16_t)x86_inb(PIC2_COMMAND_PORT) << 8;
 }
 

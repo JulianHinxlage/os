@@ -1,4 +1,4 @@
-#include "isr_stub.hpp"
+#include "isr_stub.h"
 
 void *isr_stub_table[256];
 

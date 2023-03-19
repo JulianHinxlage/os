@@ -3,7 +3,9 @@ bits 16
 
 
 ; FAT HEADER
-jmp short main
+; this is only a placeholder
+; will be overriden in creation of boot image
+jmp short start
 nop
 bdb_oem:					db "MSWIN4.1"			; 8 byte
 bdb_bytes_per_sector:		dw 512
@@ -24,6 +26,12 @@ ebr_signature:				db 29h
 ebr_volume_id:				db 01h, 02h, 03h, 04h	; 4 byte
 ebr_volume_label:			db "OS         " 		; 11 byte
 ebr_system_id:				db "FAT12   " 			; 8 byte
+
+; header padding
+times 0x5A-($-$$) db 0
+
+start:
+	jmp main
 
 ; GDT
 gdt_begin:
@@ -56,12 +64,6 @@ drive_number: db 0
 drive_heads: dw 0
 drive_sectors_per_track: dw 0
 
-halt:
-    cli
-    hlt
-    jmp halt
-    ret
-
 
 main:
 	; save boot brive from bios
@@ -87,6 +89,13 @@ main:
 	call execute_stage_2
 	bits 16
     call halt
+
+
+halt:
+    cli
+    hlt
+    jmp halt
+    ret
 
 
 ; si: address of str to print
@@ -183,14 +192,14 @@ load_stage2:
     mov dl, byte [drive_number]
 
     cmp cl, 0
-    je .skip_read
+    je .after_read
 
     call read_disk
     mov ch, 0
     imul cx, [bdb_bytes_per_sector]
     add bx, cx
 
-.skip_read:
+.after_read:
     cmp di, stage2_sector_table_end
     jb .loop
     ret
@@ -245,7 +254,6 @@ execute_stage_2:
 
 
 msg_read_error: db "Disk read failed", 0
-
 
 
 sector_table_size equ 60

@@ -1,5 +1,6 @@
 #include "ps2.h"
-#include "instructions.hpp"
+#include "instructions.h"
+#include <stdbool.h>
 
 #define PS2_DATA_PORT 0x60
 #define PS2_CMD_PORT 0x64
@@ -7,14 +8,14 @@
 void PS2_wait_for_write(){
     uint8_t status = 0;
     do{
-        status = i686_inb(PS2_CMD_PORT);
+        status = x86_inb(PS2_CMD_PORT);
     }while(status & 0x02);
 }
 
 void PS2_wait_for_read(){
     uint8_t status = 0;
     do{
-        status = i686_inb(PS2_CMD_PORT);
+        status = x86_inb(PS2_CMD_PORT);
     }while(!(status & 0x01));
 }
 
@@ -25,30 +26,30 @@ bool PS2_probe(){
 bool PS2_init(){
     //disable
     PS2_wait_for_write();
-    i686_outb(PS2_CMD_PORT, 0xAD);
+    x86_outb(PS2_CMD_PORT, 0xAD);
     PS2_wait_for_write();
-    i686_outb(PS2_CMD_PORT, 0xA7);
+    x86_outb(PS2_CMD_PORT, 0xA7);
 
     //flush output buffer
-    i686_inb(PS2_DATA_PORT);
+    x86_inb(PS2_DATA_PORT);
 
     //read controller configuration byte
     PS2_wait_for_write();
-    i686_outb(PS2_CMD_PORT, 0x20);
+    x86_outb(PS2_CMD_PORT, 0x20);
     PS2_wait_for_read();
-    uint8_t ccb = i686_inb(PS2_DATA_PORT);
+    uint8_t ccb = x86_inb(PS2_DATA_PORT);
 
     //write ccb back
     ccb &= ~(0b00100011);
     PS2_wait_for_write();
-    i686_outb(PS2_CMD_PORT, 0x60);
+    x86_outb(PS2_CMD_PORT, 0x60);
     PS2_wait_for_write();
-    i686_outb(PS2_CMD_PORT, ccb);
+    x86_outb(PS2_CMD_PORT, ccb);
 
     PS2_wait_for_write();
-    i686_outb(PS2_CMD_PORT, 0xAA);
+    x86_outb(PS2_CMD_PORT, 0xAA);
     PS2_wait_for_read();
-    uint8_t test = i686_inb(PS2_DATA_PORT);
+    uint8_t test = x86_inb(PS2_DATA_PORT);
     if(test != 0x55){
         //test failed
         return false;
@@ -56,19 +57,19 @@ bool PS2_init(){
 
     //enable
     PS2_wait_for_write();
-    i686_outb(PS2_CMD_PORT, 0xAE);
+    x86_outb(PS2_CMD_PORT, 0xAE);
     PS2_wait_for_write();
-    i686_outb(PS2_CMD_PORT, 0xA8);
+    x86_outb(PS2_CMD_PORT, 0xA8);
 
     //reset device
     PS2_wait_for_write();
-    i686_outb(PS2_CMD_PORT, 0xFF);
+    x86_outb(PS2_CMD_PORT, 0xFF);
 
     return true;
 }
 
 uint8_t PS2_get_key(){
-    return i686_inb(PS2_DATA_PORT);
+    return x86_inb(PS2_DATA_PORT);
 }
 
 unsigned char ps2_keymap[128] =

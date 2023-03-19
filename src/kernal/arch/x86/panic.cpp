@@ -1,6 +1,6 @@
 #include "panic.h"
-#include "instructions.hpp"
-#include "../../io/printf.h"
+#include "instructions.h"
+#include "io/printf.h"
 
 const char *exceptions_names[32] = {
     "Division Error",
@@ -23,7 +23,7 @@ const char *exceptions_names[32] = {
 
 void kernal_panic(ISR_Registers *regs){
         //kernal panic
-    printf("Kernal Panic\n");
+    printf("##### Kernal Panic #####\n");
     printf("Interrupt: 0x%x\n", (int)regs->interrupt);
 
     if(regs->interrupt <= 31){
@@ -38,5 +38,6 @@ void kernal_panic(ISR_Registers *regs){
     printf("ds=0x%x, eip=0x%x, cs=0x%x, eflags=0x%x\n", (int)regs->ds, (int)regs->eip, (int)regs->cs, (int)regs->eflags);
     printf("error=0x%x, user_esp=0x%x, user_ss=0x%x\n", (int)regs->error, (int)regs->user_esp, (int)regs->user_ss);
 
-    halt_all();
+    x86_cli();
+    x86_hlt();
 }

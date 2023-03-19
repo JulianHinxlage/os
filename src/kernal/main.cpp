@@ -1,7 +1,7 @@
 #include <stdint.h>
-#include "arch/i686/instructions.hpp"
+#include "arch/x86/instructions.h"
 #include "io/vga.h"
-#include "hal/hal.hpp"
+#include "hal/hal.h"
 #include "io/printf.h"
 
 extern uint8_t __entry_start;
@@ -26,6 +26,6 @@ extern "C" void kernal_main(uint8_t bootDrive){
     HAL_init();
 
     while(true){
-        halt();
+        x86_hlt();
     }
 }
