@@ -27,7 +27,7 @@ void ISR_interrupt_service_routine(ISR_Registers *regs){
 
             //printf("Key: %i", PS2_get_key());
         }
-        else if(irq== 14){
+        else if(irq == 14){
             ATA_interrupt(irq);
         }
         else{

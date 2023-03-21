@@ -58,19 +58,20 @@ always:
 	mkdir -p ../build/kernal/driver
 	mkdir -p ../build/kernal/io
 	mkdir -p ../build/kernal/hal
+	mkdir -p ../build/kernal/memory
+	mkdir -p ../build/kernal/util
 	mkdir -p ../build/bootloader
 
 # boot image
 os_fat12: always $(KERNAL) $(BOOT_STAGE1) $(BOOT_PATCHER)
 	dd if=/dev/zero of=$(IMG) bs=512 count=2880
-	mkfs.fat -F 12 -R 8 -n "PROJECT OS" $(IMG)
-	mcopy -i $(IMG) $(BOOT_STAGE1) "::boot.bin"
+	mkfs.fat -F 12 -n "PROJECT OS" $(IMG)
 	mcopy -i $(IMG) $(KERNAL) "::kernal.bin"
 	$(BOOT_PATCHER) $(IMG) $(BOOT_STAGE1) $(KERNAL)
 
 os_fat16: always $(KERNAL) $(BOOT_STAGE1) $(BOOT_PATCHER)
 	dd if=/dev/zero of=$(IMG) bs=512 count=32768
-	mkfs.fat -F 16 -R 8 -n "PROJECT OS" $(IMG)
+	mkfs.fat -F 16 -n "PROJECT OS" $(IMG)
 	mcopy -i $(IMG) $(KERNAL) "::kernal.bin"
 	$(BOOT_PATCHER) $(IMG) $(BOOT_STAGE1) $(KERNAL)
 

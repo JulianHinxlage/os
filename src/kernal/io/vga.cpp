@@ -21,6 +21,23 @@ void VGA_puts(const char *str) {
     VGA_set_cursor(cursor_pos % width, cursor_pos / width);
 }
 
+void VGA_move_up(){
+    cursor_pos = 0;
+    for(int i = 0; i < height - 1; i++){
+        for(int j = 0; j <width; j++){
+            video_memory[cursor_pos * 2 + 0] = video_memory[(cursor_pos + width) * 2 + 0];
+            video_memory[cursor_pos * 2 + 1] = video_memory[(cursor_pos + width) * 2 + 1];
+            cursor_pos++;
+        }
+    }
+    for(int j = 0; j < width; j++){
+        video_memory[cursor_pos * 2 + 0] = 0;
+        video_memory[cursor_pos * 2 + 1] = 0;
+        cursor_pos++;
+    }
+    cursor_pos = width * (height - 1);
+}
+
 void VGA_putc(char c){
     if(c == '\n'){
         cursor_pos = cursor_pos / width;
@@ -33,7 +50,7 @@ void VGA_putc(char c){
     }
 
     if(cursor_pos >= width * height){
-        VGA_clear();
+        VGA_move_up();
     }
 
     VGA_set_cursor(cursor_pos % width, cursor_pos / width);

@@ -2,10 +2,16 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
-void printNum(int num, int base){
+void printNum(int num, int base, bool isSigned = true){
     char buf[64];
     buf[63] = '\0';
     char *str = &buf[63];
+
+    bool negativ = false;
+    if(num < 0 && isSigned){
+        num = -num;
+        negativ = true;
+    }
 
     while(num > 0){
         uint8_t digit = num % base;
@@ -13,6 +19,11 @@ void printNum(int num, int base){
         char c = "0123456789abcdef"[digit % 16];
         str--;
         *str = c;
+    }
+
+    if(negativ){
+        str--;
+        *str = '-';
     }
 
     if(str == &buf[63]){
@@ -38,7 +49,7 @@ void printf(const char *fmt, ...){
             }else if(c == 'c'){
                 VGA_putc((char)va_arg(args, int));
             }else if(c == 'x'){
-                printNum(va_arg(args, int), 16);
+                printNum(va_arg(args, int), 16, false);
             }else if(c == 's'){
                 const char *str = va_arg(args, char*);
                 VGA_puts(str);
