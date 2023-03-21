@@ -17,6 +17,7 @@ bdb_total_sectors:			dw 2880
 bdb_media_descriptor_type:	db 0F0h
 bdb_sectors_per_fat:		dw 9
 bdb_sectors_per_track:		dw 0x3f 				; 0x12 for floppy and 0x3f for disk
+
 bdb_heads:					dw 0x10					; 0x02 for floppy and 0x10 for disk
 bdb_hidden_sectors:			dd 0
 bdb_large_sectors_count:	dd 0
@@ -266,7 +267,7 @@ sector_table_size equ 60
 ;	- 2 	 (boot magic)
 times 512-($-$$)-2-sector_table_size-2 db 0
 
-stage2_destination: dw 0x0500
+stage2_destination: dw 0x500
 
 ; table of sectors to load for stage 2 of bootloader
 ; stating at 32 bytes off the end of the boot sector (480, 0x1e0)

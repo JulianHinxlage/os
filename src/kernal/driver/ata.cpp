@@ -93,6 +93,9 @@ void ATA_read_sectors(uint8_t drive, uint32_t sector, uint8_t count, uint8_t *bu
     }
 
     for (int i = 0; i < 256 * count; i++) {
+        if(!ATA_wait_for_status(ATA_STATUS_DATA_READY, 1)){
+            return;
+        }
         ((uint16_t*)buffer)[i] = inw(ATA_REG_DATA);
     }
 }
