@@ -10,7 +10,7 @@ ISR_common:
     mov ax, ds
     push eax
 
-    ; switch to kernal data segment
+    ; switch to kernel data segment
     mov ax, 0x10
     mov ds, ax
     mov es, ax
@@ -43,7 +43,6 @@ ISR_stub_%1:
 %macro ISR_stub_with_error 1
 global ISR_stub_%1
 ISR_stub_%1:
-    push 0 ; error code = 0
     push %1
     jmp ISR_common
 %endmacro

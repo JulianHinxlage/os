@@ -55,6 +55,12 @@ int str_len(const char *str){
     return mem_find(str, '\0');
 }
 
+void memset(char *mem, int size, uint8_t value){
+    for(int i = 0; i < size; i++){
+        mem[i] = (char)value;
+    }
+}
+
 char to_upper(char c){
     if(c >= 'a' && c <= 'z'){
         return c - 'a' + 'A';

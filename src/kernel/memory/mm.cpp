@@ -10,9 +10,14 @@ void MM_init(){
     memory_stack = memory_stack_start;
 }
 
-void *MM_map(int size){
+void *MM_map(uint32_t size){
+    return MM_map(size, 1);
+}
+
+void *MM_map(uint32_t size, uint32_t alignement){
+    memory_stack = (uint8_t*)(((((uint32_t)memory_stack - 1) / alignement) + 1) * alignement);
     void *ptr = memory_stack;
-    memory_stack += ((size - 1) / 4) * 4 + 1;
+    memory_stack += size;
     last_map_ptr = ptr;
     return ptr;
 }

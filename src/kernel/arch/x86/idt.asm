@@ -5,7 +5,7 @@ x86_IDT_load:
     mov ebp, esp
 
     ; load idt
-    mov bx, [esp + 8]
+    mov bx, [ebp + 8]
     lidt [bx]
 
     mov esp, ebp

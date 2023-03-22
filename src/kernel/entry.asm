@@ -1,6 +1,6 @@
 bits 32
 
-extern kernal_main
+extern kernel_main
 global _start 
 global _entry
 global entry
@@ -15,4 +15,4 @@ section .entry
 entry:
 _entry:
 _start:
-    jmp kernal_main
+    jmp kernel_main

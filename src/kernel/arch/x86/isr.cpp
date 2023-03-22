@@ -39,7 +39,7 @@ void ISR_interrupt_service_routine(ISR_Registers *regs){
         return;
     }else if(regs->interrupt <= 0x20){
         //exception
-        kernal_panic(regs);
+        kernel_panic(regs);
     }else{
         //software interrupt
         printf("ISR: 0x%x\n", regs->interrupt);

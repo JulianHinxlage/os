@@ -5,11 +5,11 @@ x86_GDT_load:
     mov ebp, esp
 
     ; load gdt
-    mov bx, [esp + 8]
+    mov bx, [ebp + 8]
     lgdt [bx]
 
     ; load data segments
-    mov ax, [esp + 12]
+    mov ax, [ebp + 12]
 	mov ds, ax
 	mov ss, ax
 	mov es, ax
@@ -17,7 +17,7 @@ x86_GDT_load:
 	mov gs, ax
     
     ; load code segment
-    mov eax, [esp + 16]
+    mov eax, [ebp + 16]
     push eax
     push .done
     retf ; hack to perform long jump to value on stack

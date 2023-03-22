@@ -21,9 +21,9 @@ const char *exceptions_names[32] = {
     "Reserved",
 };
 
-void kernal_panic(ISR_Registers *regs){
-        //kernal panic
-    printf("##### Kernal Panic #####\n");
+void kernel_panic(ISR_Registers *regs){
+    //kernel panic
+    printf("##### Kernel Panic #####\n");
     printf("Interrupt: 0x%x\n", (int)regs->interrupt);
 
     if(regs->interrupt <= 31){
